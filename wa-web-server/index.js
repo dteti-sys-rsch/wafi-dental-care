@@ -65,30 +65,39 @@ app.get('/qr', async (req, res) => {
   }
 })
 
-app.get('/send-message', async (req, res) => {
-  const { number, message, secret } = req.query
+app.post('/send-message', async (req, res) => {
+  const { number, message, secret } = req.body
 
-  if (secret !== process.env.WA_SECRET_KEY) {
-    return res.status(403).send('Forbidden! Invalid secret key!')
-  }
+  const validations = [
+    [
+      secret === process.env.WA_SECRET_KEY,
+      'Forbidden! Invalid secret key!',
+      403
+    ],
+    [number, 'Number is required!', 400],
+    [message, 'Message is required!', 400],
+    [/^\d+$/.test(number), 'Number must contain digits only.', 400],
+    [!/^0[0-9].*$/.test(number), 'Number must be in country code format.', 400]
+  ]
 
-  if (!number || !message) {
-    return res.status(400).send('Number and message are required!')
+  for (const [condition, errorMessage, statusCode] of validations) {
+    if (!condition) return res.status(statusCode).send(errorMessage)
   }
 
   try {
     await client.sendMessage(`${number}@c.us`, message)
-    res.status(200).send('Message sent!')
+    return res.status(200).send('Message sent!')
   } catch (error) {
     console.error('Error sending message:', error)
-    res.status(500).send('Failed to send message.')
+    return res.status(500).send('Failed to send message.')
   }
 })
 
-app.use((err, res) => {
+app.use((err, req, res, next) => {
+  console.error(err)
   res.status(500).json({
     error: 'Internal Server Error',
-    message: 'Something went wrong on the server.'
+    message: err.message ?? 'Something went wrong'
   })
 })
 
