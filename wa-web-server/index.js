@@ -86,7 +86,6 @@ app.get('/send-message', async (req, res) => {
 })
 
 app.use((err, res) => {
-  ;``
   res.status(500).json({
     error: 'Internal Server Error',
     message: 'Something went wrong on the server.'
