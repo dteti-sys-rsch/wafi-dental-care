@@ -10,7 +10,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: './.env' })
 
 // MONGODB CONNECTION
-const connectDB = require('./src/config/mongo')
+const connectDB = require('./src/configs/mongo')
 connectDB()
 
 // MIDDLEWARE
@@ -23,9 +23,13 @@ app.use(morgan('dev'))
 app.use(cors())
 
 // ROUTES
+const branchRoutes = require('./src/routes/branch')
+const userRoutes = require('./src/routes/user')
 app.get('/', (req, res) => {
   res.send('Wafi Dental Care Backend Service!')
 })
+app.use('/api/branch', branchRoutes)
+app.use('/api/user', userRoutes)
 
 // ROUTE ERROR HANDLING
 app.use((req, res, next) => {
