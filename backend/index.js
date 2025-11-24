@@ -25,11 +25,13 @@ app.use(cors())
 // ROUTES
 const branchRoutes = require('./src/routes/branch')
 const userRoutes = require('./src/routes/user')
+const patientRoutes = require('./src/routes/patient')
 app.get('/', (req, res) => {
   res.send('Wafi Dental Care Backend Service!')
 })
 app.use('/api/branch', branchRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/patient', patientRoutes)
 
 // ROUTE ERROR HANDLING
 app.use((req, res, next) => {

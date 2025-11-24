@@ -1,5 +1,4 @@
 const User = require('../models/User')
-const Branch = require('../models/Branch')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -46,10 +45,7 @@ exports.loginUser = async (req, res) => {
     delete userData.branch.__v
 
     res.status(200).json({
-      token: jwt.sign(
-        { id: user._id },
-        process.env.JWT_SECRET
-      ),
+      token: jwt.sign({ userId: user._id }, process.env.JWT_SECRET),
       message: 'Login successful',
       user: userData
     })
