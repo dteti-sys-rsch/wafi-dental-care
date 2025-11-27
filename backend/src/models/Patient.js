@@ -46,6 +46,12 @@ const PatientSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'DiseaseHistory'
     }
+  ],
+  patientMedicalAssessments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MedicalAssessment'
+    }
   ]
 })
 
