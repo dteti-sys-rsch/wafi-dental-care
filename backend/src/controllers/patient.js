@@ -1,5 +1,6 @@
 const Patient = require('../models/Patient')
 const DiseaseHistory = require('../models/DiseaseHistory')
+const MedicalAssessment = require('../models/MedicalAssesement')
 
 /*
     Create a new patient
@@ -254,6 +255,65 @@ exports.deletePatientById = async (req, res) => {
 
     return res.status(200).json({
       message: 'Patient deleted successfully'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Create medical assessment for a patient by a doctor
+*/
+exports.createMedicalAssessment = async (req, res) => {
+  try {
+    const { patientId, date, subjective, objective, diagnosisAndAction } =
+      req.body
+    const assessmentBy = req.userId
+
+    const patient = await Patient.findById(patientId)
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' })
+    }
+
+    const medicalAssessment = new MedicalAssessment({
+      patientId,
+      assessmentBy,
+      assessmentDate: date,
+      assesementSubjective: subjective,
+      assesementObjective: objective,
+      assesementDiagnosisAndAction: diagnosisAndAction
+    })
+    await medicalAssessment.save()
+
+    patient.patientMedicalAssessments.push(medicalAssessment._id)
+    await patient.save()
+    res.status(201).json({
+      message: 'Medical assessment created successfully'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Get medical assessments for a patient
+*/
+exports.getMedicalAssessmentsByPatient = async (req, res) => {
+  try {
+    const { patientId } = req.params
+    const patient = await Patient.findById(patientId).populate({
+      path: 'patientMedicalAssessments',
+      populate: {
+        path: 'assessmentBy',
+        select: 'username'
+      }
+    })
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' })
+    }
+    res.status(200).json({
+      medicalAssessments: patient.patientMedicalAssessments
     })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })

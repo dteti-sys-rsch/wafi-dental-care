@@ -15,4 +15,8 @@ router.post('/diseasehistory/add', authMiddleware.ensureAuthenticated, patientCo
 router.put('/diseasehistory/edit', authMiddleware.ensureAuthenticated, patientController.editDiseaseHistory)
 router.delete('/diseasehistory/delete/:patientId/:diseaseHistoryId', authMiddleware.ensureAuthenticated, patientController.deleteDiseaseHistory)
 
+// Medical Assessment
+router.post('/medicalassessment/add', authMiddleware.ensureAuthenticated, authMiddleware.ensureDoctor, patientController.createMedicalAssessment)
+router.get('/medicalassessment/:patientId', authMiddleware.ensureAuthenticated, patientController.getMedicalAssessmentsByPatient)
+
 module.exports = router
