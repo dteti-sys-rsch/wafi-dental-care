@@ -22,7 +22,9 @@ app.use(morgan("dev"));
 // CORS
 app.use(
   cors({
-    origin: "localhost:3000",
+    origin: "http://localhost:3000", //* ADJUST ON PRODUCTION
+    credentials: true,
+    optionsSuccessStatus: 200
   })
 );
 
@@ -43,6 +45,7 @@ app.use((req, res, next) => {
   error.status = 404;
   next(error);
 });
+
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
   res.json({
