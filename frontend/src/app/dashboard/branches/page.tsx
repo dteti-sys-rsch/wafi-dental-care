@@ -1,4 +1,4 @@
-import Breadcrumb from "@/app/components/shared/Breadcrumb";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 
 export default function PatientPage() {
   const breadcrumbData = [

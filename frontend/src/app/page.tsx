@@ -1,8 +1,8 @@
 import Image from "next/image";
 import LogoWhite from "@/../public/LogoWhite.png";
-import ThemeSwitcher from "./components/shared/ThemeSwitcher";
+import ThemeSwitcher from "../components/shared/ThemeSwitcher";
 import Link from "next/link";
-import Button from "./components/shared/Button";
+import Button from "../components/shared/Button";
 
 export default function Home() {
   return (
@@ -22,7 +22,7 @@ export default function Home() {
       </div>
 
       <div className="mt-10">
-        <Link href="/dashboard">
+        <Link href="/auth/login">
           <Button type="button" className="px-10">
             <span>Log In</span>
           </Button>

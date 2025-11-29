@@ -1,7 +1,8 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import type { Metadata } from "next";
-import LayoutWrapper from "./components/layouts/LayoutWrapper";
+import LayoutWrapper from "../components/layouts/LayoutWrapper";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Dental Management System",
@@ -21,7 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -47,9 +51,8 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased ${jakarta.variable}`}>
-        <LayoutWrapper>
-          {children}
-        </LayoutWrapper>
+        <ToastContainer />
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

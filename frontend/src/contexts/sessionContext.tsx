@@ -1,12 +1,13 @@
 // SessionContext.tsx
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { IUser, UserRole } from '../types';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { IUser, UserRole } from "../app/types";
+import { setCookie } from "@/app/utilities/cookie";
 
 // ============================================================================
 // SESSION TYPES
 // ============================================================================
 
-type IUserSession = Omit<IUser, 'password'>;
+type IUserSession = Omit<IUser, "password">;
 
 interface SessionContextType {
   user: IUserSession | null;
@@ -43,17 +44,17 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
   const checkSession = async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      
+      const token = localStorage.getItem("authToken");
+
       if (!token) {
         setIsLoading(false);
         return;
       }
 
       // Validate token and get user data
-      const response = await fetch('/api/auth/validate', {
+      const response = await fetch("/api/auth/validate", {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -62,11 +63,11 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
         setUser(data.user);
       } else {
         // Token is invalid, clear it
-        localStorage.removeItem('authToken');
+        localStorage.removeItem("authToken");
       }
     } catch (error) {
-      console.error('Session check failed:', error);
-      localStorage.removeItem('authToken');
+      console.error("Session check failed:", error);
+      localStorage.removeItem("authToken");
     } finally {
       setIsLoading(false);
     }
@@ -74,34 +75,39 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/user/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          username,
+          password,
+        }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       // Store token
-      localStorage.setItem('authToken', data.token);
-      
+      setCookie("AuthToken", data.token, 10 * 3600)
+
       // Set user data
       setUser(data.user);
+
+      return data; // Return the data if needed
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("authToken");
     setUser(null);
   };
 
@@ -111,7 +117,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
   const hasRole = (roles: UserRole | UserRole[]): boolean => {
     if (!user) return false;
-    
+
     const roleArray = Array.isArray(roles) ? roles : [roles];
     return roleArray.includes(user.role);
   };
@@ -126,11 +132,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
     hasRole,
   };
 
-  return (
-    <SessionContext.Provider value={value}>
-      {children}
-    </SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 };
 
 // ============================================================================
@@ -139,11 +141,11 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
 export const useSession = (): SessionContextType => {
   const context = useContext(SessionContext);
-  
+
   if (context === undefined) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
-  
+
   return context;
 };
 
@@ -157,10 +159,10 @@ interface ProtectedRouteProps {
   fallback?: ReactNode;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
   requiredRoles,
-  fallback = <div>Unauthorized access</div>
+  fallback = <div>Unauthorized access</div>,
 }) => {
   const { isAuthenticated, hasRole, isLoading } = useSession();
 
@@ -177,7 +179,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!isAuthenticated) {
     // Redirect to login or show fallback
-    window.location.href = '/login';
+    window.location.href = "/login";
     return null;
   }
 
@@ -198,11 +200,7 @@ interface RoleGateProps {
   fallback?: ReactNode;
 }
 
-export const RoleGate: React.FC<RoleGateProps> = ({ 
-  children, 
-  allowedRoles,
-  fallback = null
-}) => {
+export const RoleGate: React.FC<RoleGateProps> = ({ children, allowedRoles, fallback = null }) => {
   const { hasRole } = useSession();
 
   if (!hasRole(allowedRoles)) {
@@ -211,3 +209,4 @@ export const RoleGate: React.FC<RoleGateProps> = ({
 
   return <>{children}</>;
 };
+

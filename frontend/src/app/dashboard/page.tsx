@@ -1,6 +1,6 @@
-import Breadcrumb from "../components/shared/Breadcrumb";
-import { BreadcrumbData } from "../components/shared/Breadcrumb";
-import ContentCard from "../components/shared/ContentCard";
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import { BreadcrumbData } from "../../components/shared/Breadcrumb";
+import ContentCard from "../../components/shared/ContentCard";
 
 export const metadata = {
   title: "Dashboard",
@@ -30,15 +30,15 @@ export default function DashboardPage() {
       <ContentCard className="my-7">
         <div className="flex justify-between">
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] font-bold text-white">15</h1>
+            <h1 className="text-[30px] font-bold text-dark dark:text-white">15</h1>
             <p className="text-[20px] font-medium max-w-[15ch]">New Customers</p>
           </div>
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] font-bold text-white">20</h1>
+            <h1 className="text-[30px] font-bold text-dark dark:text-white">20</h1>
             <p className="text-[20px] font-medium">Total Customers</p>
           </div>
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] text-white font-bold">545K</h1>
+            <h1 className="text-[30px] font-bold text-dark dark:text-white">545K</h1>
             <p className="text-[20px] font-medium">Monthly Revenue (IDR)</p>
           </div>
         </div>
