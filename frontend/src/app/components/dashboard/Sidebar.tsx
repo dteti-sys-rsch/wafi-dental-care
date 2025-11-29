@@ -5,15 +5,64 @@ import ThemeSwitcher from "../shared/ThemeSwitcher";
 import LogoWhite from "@/../public/LogoWhite.png";
 import { usePathname } from "next/navigation";
 import NavigationItem from "./NavigationLink";
-import { House, User } from "lucide-react";
+import { Building2, Calendar, ClipboardList, FileText, House, UserCog, Users } from "lucide-react";
 import Link from "next/link";
 
 export function Sidebar() {
   const path = usePathname();
 
   const mainLinks = [
-    { label: "Main Dashboard", link: "/dashboard", icon: <House />, active: path === "/dashboard" },
-    { label: "Customers", link: "/dashboard/customers", icon: <User />, active: path === "/dashboard/customers"}
+    {
+      label: "Main Dashboard",
+      link: "/dashboard",
+      icon: <House />,
+      active: path === "/dashboard",
+    },
+    {
+      label: "Patients",
+      link: "/dashboard/patients",
+      icon: <Users />,
+      active: path.startsWith("/dashboard/patients"),
+    },
+    {
+      label: "Assessments",
+      link: "/dashboard/assessments",
+      icon: <ClipboardList />,
+      active: path.startsWith("/dashboard/assessments"),
+      // Quick access to medical assessments across all patients
+    },
+    {
+      label: "Appointments",
+      link: "/dashboard/appointments",
+      icon: <Calendar />,
+      active: path.startsWith("/dashboard/appointments"),
+      // If you plan to add scheduling
+    },
+  ];
+
+  const managementLinks = [
+    {
+      label: "Branches",
+      link: "/dashboard/branches",
+      icon: <Building2 />,
+      active: path.startsWith("/dashboard/branches"),
+      // Roles: OWNER, MANAGER
+    },
+    {
+      label: "Users & Staff",
+      link: "/dashboard/users",
+      icon: <UserCog />,
+      active: path.startsWith("/dashboard/users"),
+      // Roles: OWNER, MANAGER
+    },
+    {
+      label: "Disease Registry",
+      link: "/dashboard/diseases",
+      icon: <FileText />,
+      active: path.startsWith("/dashboard/diseases"),
+      // Common diseases, templates, ICD codes
+      // Roles: OWNER, MANAGER, DOCTOR
+    },
   ];
 
   return (
@@ -38,7 +87,7 @@ export function Sidebar() {
 
         <hr className="border-grey-gc mt-4 mb-[50px]" />
 
-        <h1 className="text-grey-gc font-bold text-[14px] mb-2.5">MAIN</h1>
+        <h1 className="text-grey-gc font-bold text-[14px] mb-2.5">MENU</h1>
         <div className="flex flex-col gap-2.5">
           {mainLinks.map((item) => (
             <NavigationItem
@@ -51,7 +100,18 @@ export function Sidebar() {
           ))}
         </div>
 
-        <h1 className="text-grey-gc font-bold text-[14px] mb-2.5 mt-5">OTHERS</h1>
+        <h1 className="text-grey-gc font-bold text-[14px] mb-2.5 mt-5">MANAGEMENT</h1>
+        <div className="flex flex-col gap-2.5">
+          {managementLinks.map((item) => (
+            <NavigationItem
+              key={item.label}
+              link={item.link}
+              label={item.label}
+              icon={item.icon}
+              active={item.active}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="mx-auto">

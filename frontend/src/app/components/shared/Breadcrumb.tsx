@@ -17,7 +17,7 @@ export default function Breadcrumb({
     <div className={"flex text-green-dark dark:text-grey-gc font-semibold " + className}>
       {data.map((d, index) => (
         <div className="flex items-center" key={d.url}>
-          <Link href={d.url} className="hover:bg-green-dark/10 px-2 py-1 rounded-md">{d.label}</Link>
+          <Link href={d.url} className="hover:bg-white/10 duration-200 px-2 py-1 rounded-md">{d.label}</Link>
           {isTheLastBreadcrumb(index, data.length) ? null : <ChevronRight className="my-2.5" />}
         </div>
       ))}

@@ -3,8 +3,8 @@ import { BreadcrumbData } from "../components/shared/Breadcrumb";
 import ContentCard from "../components/shared/ContentCard";
 
 export const metadata = {
-  title: "Dashboard - GardaChain",
-  description: "Your dashboard for GardaChain",
+  title: "Dashboard",
+  description: "DMS Dashboard",
 };
 
 export default function DashboardPage() {
@@ -30,24 +30,24 @@ export default function DashboardPage() {
       <ContentCard className="my-7">
         <div className="flex justify-between">
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] font-bold text-green-500">15</h1>
+            <h1 className="text-[30px] font-bold text-white">15</h1>
             <p className="text-[20px] font-medium max-w-[15ch]">New Customers</p>
           </div>
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] font-bold text-orange-gc">$6.918b</h1>
-            <p className="text-[20px] font-medium">Hacked in DeFi (USD)</p>
+            <h1 className="text-[30px] font-bold text-white">20</h1>
+            <p className="text-[20px] font-medium">Total Customers</p>
           </div>
           <div className="flex flex-col text-grey-gc">
-            <h1 className="text-[30px] text-orange-gc-light font-bold">$2.891b</h1>
-            <p className="text-[20px] font-medium">Hacked in Bridges (USD)</p>
+            <h1 className="text-[30px] text-white font-bold">545K</h1>
+            <p className="text-[20px] font-medium">Monthly Revenue (IDR)</p>
           </div>
         </div>
       </ContentCard>
 
       <ContentCard>
-        <h1 className="text-[24px] font-semibold text-green-dark dark:text-white">Recent Audit Reports</h1>
+        <h1 className="text-[24px] font-semibold text-green-dark dark:text-white">Title</h1>
         <p className="font-semibold text-grey-dark dark:text-grey-gc mb-5">
-          Check your most recent audit reports here.
+          Explanation for this section.
         </p>
       </ContentCard>
     </main>
