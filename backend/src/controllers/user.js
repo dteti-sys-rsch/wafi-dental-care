@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 /*
-    Create a new user with hashed password and assigned branch
+  Create a new user with hashed password and assigned branch
 */
 exports.createUser = async (req, res) => {
   try {
@@ -23,7 +23,7 @@ exports.createUser = async (req, res) => {
 }
 
 /*
-    Login user and verify password
+  Login user and verify password
 */
 exports.loginUser = async (req, res) => {
   try {

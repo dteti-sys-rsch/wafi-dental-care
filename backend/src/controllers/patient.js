@@ -3,7 +3,7 @@ const DiseaseHistory = require('../models/DiseaseHistory')
 const MedicalAssessment = require('../models/MedicalAssesement')
 
 /*
-    Create a new patient
+  Create a new patient
 */
 exports.createPatient = async (req, res) => {
   try {
@@ -37,7 +37,7 @@ exports.createPatient = async (req, res) => {
 }
 
 /*
- Create disease history for a patient
+  Create disease history for a patient
 */
 exports.addDiseaseHistory = async (req, res) => {
   try {
@@ -64,7 +64,7 @@ exports.addDiseaseHistory = async (req, res) => {
 }
 
 /*
-    Get all patients
+  Get all patients
 */
 exports.getAllPatients = async (req, res) => {
   try {
@@ -84,7 +84,7 @@ exports.getAllPatients = async (req, res) => {
 }
 
 /*
-    View detailed patient info by ID
+  View detailed patient info by ID
 */
 exports.getPatientById = async (req, res) => {
   try {
@@ -110,7 +110,7 @@ exports.getPatientById = async (req, res) => {
 }
 
 /*
-    Edit patient info by ID
+  Edit patient info by ID
 */
 exports.editPatientById = async (req, res) => {
   try {
@@ -167,7 +167,7 @@ exports.editPatientById = async (req, res) => {
 }
 
 /*
- Edit disease history for a patient
+  Edit disease history for a patient
 */
 exports.editDiseaseHistory = async (req, res) => {
   try {
@@ -194,7 +194,7 @@ exports.editDiseaseHistory = async (req, res) => {
 }
 
 /*
-    Delete disease history by ID
+  Delete disease history by ID
 */
 exports.deleteDiseaseHistory = async (req, res) => {
   try {
@@ -230,7 +230,7 @@ exports.deleteDiseaseHistory = async (req, res) => {
 }
 
 /*
-    Delete patient by ID
+  Delete patient by ID
 */
 exports.deletePatientById = async (req, res) => {
   try {

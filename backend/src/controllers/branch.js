@@ -1,7 +1,7 @@
 const Branch = require('../models/Branch')
 
 /*
-    Create a new branch
+  Create a new branch
 */
 exports.createBranch = async (req, res) => {
   try {
@@ -18,7 +18,7 @@ exports.createBranch = async (req, res) => {
 }
 
 /*
-    Get all branches
+  Get all branches
 */
 exports.getAllBranches = async (req, res) => {
   try {
