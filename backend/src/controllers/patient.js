@@ -251,6 +251,15 @@ exports.deletePatientById = async (req, res) => {
       })
     }
 
+    if (
+      Array.isArray(patient.patientMedicalAssessments) &&
+      patient.patientMedicalAssessments.length > 0
+    ) { 
+      return res.status(400).json({
+        message: 'Cannot delete patient because medical assessments still exist!'
+      })
+    }
+    
     await Patient.findByIdAndDelete(patientId)
 
     return res.status(200).json({
@@ -314,6 +323,63 @@ exports.getMedicalAssessmentsByPatient = async (req, res) => {
     }
     res.status(200).json({
       medicalAssessments: patient.patientMedicalAssessments
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Edit medical assesement based on assesement id
+*/
+exports.editMedicalAssessment = async (req, res) => {
+  try {
+    const { assessmentId } = req.params
+    const { date, subjective, objective, diagnosisAndAction } = req.body
+
+    const medicalAssessment = await MedicalAssessment.findById(assessmentId)
+    if (!medicalAssessment) {
+      return res.status(404).json({ message: 'Medical assessment not found' })
+    }
+
+    medicalAssessment.assessmentDate = date || medicalAssessment.assessmentDate
+    medicalAssessment.assesementSubjective =
+      subjective || medicalAssessment.assesementSubjective
+    medicalAssessment.assesementObjective =
+      objective || medicalAssessment.assesementObjective
+    medicalAssessment.assesementDiagnosisAndAction =
+      diagnosisAndAction || medicalAssessment.assesementDiagnosisAndAction
+    await medicalAssessment.save()
+
+    res.status(200).json({
+      message: 'Medical assessment updated successfully'
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Delete medical assessment by ID
+*/
+exports.deleteMedicalAssessment = async (req, res) => {
+  try {
+    const { assessmentId } = req.params
+    const medicalAssessment = await MedicalAssessment.findByIdAndDelete(
+      assessmentId
+    )
+    if (!medicalAssessment) {
+      return res.status(404).json({ message: 'Medical assessment not found' })
+    }
+    const patient = await Patient.findById(medicalAssessment.patientId)
+    if (patient) {
+      await Patient.updateOne(
+        { _id: patient._id },
+        { $pull: { patientMedicalAssessments: assessmentId } }
+      )
+    }
+    res.status(200).json({
+      message: 'Medical assessment deleted successfully'
     })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
