@@ -25,13 +25,6 @@ export function Sidebar() {
       active: path.startsWith("/dashboard/patients"),
     },
     {
-      label: "Assessments",
-      link: "/dashboard/assessments",
-      icon: <ClipboardList />,
-      active: path.startsWith("/dashboard/assessments"),
-      // Quick access to medical assessments across all patients
-    },
-    {
       label: "Appointments",
       link: "/dashboard/appointments",
       icon: <Calendar />,

@@ -1,6 +1,7 @@
 "use client";
 import { IPatient } from "@/app/types";
 import { getPatientById } from "@/client/client";
+import NewAssessment from "@/components/dashboard/NewAssessment";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { toast } from "react-toastify";
 export default function PatientDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const [openNewAssessment, setOpenNewAssessment] = useState<boolean>(false);
 
   const breadcrumbData = [
     {
@@ -211,7 +213,10 @@ export default function PatientDetailPage() {
 
         {/* Medical Assessments Card */}
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-          <h3 className="text-xl font-bold text-green-dark dark:text-white mb-4">Medical Assessments</h3>
+          <div className="flex items-start justify-between mb-4">
+            <h3 className="text-xl font-bold text-green-dark dark:text-white">Medical Assessments</h3>
+          <NewAssessment modalState={openNewAssessment} setModalState={setOpenNewAssessment} patientId={id as string} />
+          </div>
           {patient.patientMedicalAssessments.length > 0 ? (
             <ul className="space-y-2">
               {patient.patientMedicalAssessments.map((assessment, index) => (

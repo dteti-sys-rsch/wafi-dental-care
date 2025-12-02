@@ -122,3 +122,106 @@ export async function deletePatientById(patientId: string) {
 
   return response.json();
 }
+
+export async function getAllAssessments() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/assessment/`, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch assessments');
+  }
+
+  return response.json();
+}
+
+export async function createAssessment(data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/medicalassessment/add`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to create assessment');
+  }
+
+  return response.json();
+}
+
+export async function getMedicalAssessmentsByPatient(patientId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/medicalassessment/${patientId}`,
+    {
+      credentials: 'include',
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch assessments');
+  }
+
+  return response.json();
+}
+
+// client/client.ts
+export async function getAllUsers() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/`, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch users');
+  }
+
+  return response.json();
+}
+
+export async function createUser(data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to create user');
+  }
+
+  return response.json();
+}
+
+export async function deleteUser(userId: string) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/delete/${userId}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to delete user');
+  }
+
+  return response.json();
+}
+
+export async function getAllBranches() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/`, {
+    method: "GET",
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch branches');
+  }
+
+  return response.json();
+}
