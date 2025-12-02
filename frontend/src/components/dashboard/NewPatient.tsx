@@ -62,16 +62,16 @@ export default function NewPatient({
       const response = await createNewPatient(patientData);
 
       console.log(response);
-      toast("New Patient Created");
+      toast.success("New Patient Created");
     } catch (error) {
       if (error instanceof Error) {
         if (error.message == "Authentication Error") {
-          toast("Authentication failed, please authenticate again");
+          toast.error("Authentication failed, please authenticate again");
           return router.replace("/auth/login");
         }
-        toast(error.message);
+        toast.error(error.message);
       }
-      toast("An error occured");
+      toast.error("An error occured");
     }
   }
 

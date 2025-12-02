@@ -81,7 +81,7 @@ export default function PatientPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-light-primary dark:bg-dark-primary">
+                <thead className="bg-light-secondary dark:bg-dark-primary border-b">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
                       MR Number

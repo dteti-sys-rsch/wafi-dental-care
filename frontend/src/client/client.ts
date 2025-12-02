@@ -49,8 +49,8 @@ export async function createNewPatient(patientData: {
     credentials: "include",
     body: JSON.stringify(patientData),
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (response.status == 401) {
@@ -59,6 +59,44 @@ export async function createNewPatient(patientData: {
 
   if (!response.ok) {
     throw new Error(`Error: ${response.status}, ${await response.text()}`);
+  }
+
+  return response.json();
+}
+
+export async function getPatientById(patientId: string) {
+  const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/patient/" + patientId, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (response.status == 201) {
+    throw new Error("Authentication Error");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}, ${response.text()}`);
+  }
+
+  return response.json();
+}
+
+export async function editPatientById(patientId: string, data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/edit/${patientId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to update patient');
   }
 
   return response.json();

@@ -71,3 +71,6 @@ body {
   text-overflow: ellipsis;
 }
 
+button {
+  cursor: pointer;
+}

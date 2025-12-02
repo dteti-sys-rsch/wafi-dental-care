@@ -19,20 +19,20 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (username == "") {
-      return toast("Username cannot be empty");
+      return toast.error("Username cannot be empty");
     }
 
     if (password == "") {
-      return toast("Password cannot be empty");
+      return toast.error("Password cannot be empty");
     }
 
     try {
       const response = await login(username, password);
       console.log(response);
-      toast("Login success");
+      toast.success("Login success");
       router.replace("/dashboard");
     } catch (error) {
-      toast(error instanceof Error ? error.message : "An error occurred");
+      toast.error(error instanceof Error ? error.message : "An error occurred");
     }
   }
 
