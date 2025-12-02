@@ -1,7 +1,6 @@
 // SessionContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { IUser, UserRole } from "../app/types";
-import { setCookie } from "@/app/utilities/cookie";
 
 // ============================================================================
 // SESSION TYPES
@@ -44,30 +43,31 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
   const checkSession = async () => {
     try {
-      const token = localStorage.getItem("authToken");
-
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-
-      // Validate token and get user data
-      const response = await fetch("/api/auth/validate", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      // Use any protected endpoint to validate the HttpOnly cookie
+      // Browser automatically sends cookie with credentials: "include"
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/patient/", {
+        credentials: "include", // Send HttpOnly cookies automatically
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
+        // Token/cookie is valid - restore user data from localStorage
+        const userDataStr = localStorage.getItem("userData");
+        if (userDataStr) {
+          const userData = JSON.parse(userDataStr);
+          setUser(userData);
+        } else {
+          // Cookie exists but no user data - clear state
+          setUser(null);
+        }
       } else {
-        // Token is invalid, clear it
-        localStorage.removeItem("authToken");
+        // Token is invalid (401/403) - clear user data
+        localStorage.removeItem("userData");
+        setUser(null);
       }
     } catch (error) {
       console.error("Session check failed:", error);
-      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -80,6 +80,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Receive HttpOnly cookies in response
         body: JSON.stringify({
           username,
           password,
@@ -93,13 +94,14 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
       const data = await response.json();
 
-      // Store token
-      setCookie("AuthToken", data.token, 10 * 3600)
+      // Backend sets HttpOnly cookie in response headers
+      // Store user data in localStorage for client-side access
+      localStorage.setItem("userData", JSON.stringify(data.user));
 
-      // Set user data
+      // Set user data in state
       setUser(data.user);
 
-      return data; // Return the data if needed
+      return data;
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -107,12 +109,20 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
+    // Call backend logout endpoint to clear HttpOnly cookie
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/user/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch(console.error);
+    
+    // Clear user data from localStorage and state
+    localStorage.removeItem("userData");
     setUser(null);
   };
 
   const updateUser = (updatedUser: IUserSession) => {
     setUser(updatedUser);
+    localStorage.setItem("userData", JSON.stringify(updatedUser));
   };
 
   const hasRole = (roles: UserRole | UserRole[]): boolean => {
@@ -124,7 +134,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
   const value: SessionContextType = {
     user,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user, // Based on user existence
     isLoading,
     login,
     logout,
@@ -168,7 +178,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-green-dark">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
@@ -178,8 +188,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!isAuthenticated) {
-    // Redirect to login or show fallback
-    window.location.href = "/login";
+    // Redirect to login
+    if (typeof window !== 'undefined') {
+      window.location.href = "/auth/login";
+    }
     return null;
   }
 
@@ -209,4 +221,3 @@ export const RoleGate: React.FC<RoleGateProps> = ({ children, allowedRoles, fall
 
   return <>{children}</>;
 };
-
