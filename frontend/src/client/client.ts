@@ -86,19 +86,39 @@ export async function getPatientById(patientId: string) {
 
 export async function editPatientById(patientId: string, data: unknown) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/edit/${patientId}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to update patient');
+    throw new Error(error.message || "Failed to update patient");
   }
 
   return response.json();
 }
 
+export async function deletePatientById(patientId: string) {
+  const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/patient/delete/" + patientId, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.status == 401) {
+    throw new Error("Authentication Error")
+  }
+
+    if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update patient");
+  }
+
+  return response.json();
+}

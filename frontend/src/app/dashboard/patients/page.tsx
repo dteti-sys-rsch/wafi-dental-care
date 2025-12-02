@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllPatients } from "@/client/client";
+import { deletePatientById, getAllPatients } from "@/client/client";
 import NewPatient from "@/components/dashboard/NewPatient";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { IPatient } from "@/app/types";
@@ -9,11 +9,15 @@ import { toast } from "react-toastify";
 import ContentCard from "@/components/shared/ContentCard";
 import Link from "next/link";
 import { Eye, Trash } from "lucide-react";
+import Button from "@/components/shared/Button";
 
 export default function PatientPage() {
   const [openNewPatientModal, setOpenNewPatientModal] = useState<boolean>(false);
   const [patients, setPatients] = useState<IPatient[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [selectedPatientId, setSelectedPatientId] = useState<string>("");
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchPatients() {
@@ -28,7 +32,7 @@ export default function PatientPage() {
       }
     }
     fetchPatients();
-  }, []);
+  }, [openDeleteModal, openNewPatientModal]);
 
   const breadcrumbData = [
     {
@@ -52,6 +56,16 @@ export default function PatientPage() {
       day: "numeric",
     });
   };
+
+  async function deletePatient(id: string) {
+    try {
+      await deletePatientById(id);
+      toast.success("Patient Deleted");
+      setOpenDeleteModal(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "An error occurred");
+    }
+  }
 
   return (
     <main className="bg-light-secondary dark:bg-dark-primary w-full min-h-screen p-10">
@@ -121,14 +135,18 @@ export default function PatientPage() {
                         {patient.patientWAPhoneNumber}
                       </td>
                       <td className="px-6 py-4 text-sm">
-                        <Link href={`/dashboard/patients/${patient._id}`} className="cursor-pointer!">
+                        <Link
+                          href={`/dashboard/patients/${patient._id}`}
+                          className="cursor-pointer!"
+                        >
                           <button className="text-green-dark dark:text-white mr-4 cursor-pointer hover:opacity-80">
                             <Eye />
                           </button>
                         </Link>
                         <button
                           onClick={() => {
-                            /* Handle delete */
+                            setSelectedPatientId(patient._id);
+                            setOpenDeleteModal(true);
                           }}
                           className="text-red-500 cursor-pointer hover:opacity-80"
                         >
@@ -150,6 +168,33 @@ export default function PatientPage() {
           </div>
         )}
       </ContentCard>
+
+      <div
+        className={`${
+          openDeleteModal ? "flex justify-center items-center" : "hidden"
+        } w-screen h-screen absolute top-0 left-0`}
+      >
+        <div
+          className="bg-green-dark/20 backdrop-blur-sm w-full h-full absolute z-0"
+          onClick={() => {
+            setOpenDeleteModal(false);
+          }}
+        ></div>
+
+        <ContentCard className="relative z-1 flex flex-col gap-2">
+          <h2 className="text-[20px] font-semibold text-green-dark dark:text-white text-center">Delete Confirmation</h2>
+          <p>Are you sure you want to delete this patient?</p>
+          <div className="flex gap-2 justify-center mt-2">
+            <Button
+              className="bg-red-500 hover:bg-red-600"
+              onClick={() => deletePatient(selectedPatientId)}
+            >
+              Delete
+            </Button>
+            <Button onClick={() => setOpenDeleteModal(false)}>Cancel</Button>
+          </div>
+        </ContentCard>
+      </div>
     </main>
   );
 }

@@ -63,6 +63,7 @@ export default function NewPatient({
 
       console.log(response);
       toast.success("New Patient Created");
+      setModalState(false);
     } catch (error) {
       if (error instanceof Error) {
         if (error.message == "Authentication Error") {
