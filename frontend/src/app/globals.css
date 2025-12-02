@@ -16,6 +16,10 @@
     --background-secondary: #e2e8f0;
     --foreground-secondary: #0f172a;
   }
+
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 }
 
 @theme {
@@ -23,38 +27,36 @@
   --color-foreground-primary: var(--foreground-primary);
   --color-background-secondary: var(--background-secondary);
   --color-foreground-secondary: var(--foreground-secondary);
-  
+
   /* Theme Colors */
-  --color-green-dark: #2C492F;
-  --color-blue-gc: #3B82F6;
-  
-  --color-red-gc: #CA252E;
+  --color-green-dark: #2c492f;
+  --color-blue-gc: #3b82f6;
 
-  --color-orange-gc: #F74013;
-  --color-orange-gc-light: #FFA109;
+  --color-red-gc: #ca252e;
 
-  --color-grey-gc: #94A3B8;
+  --color-orange-gc: #f74013;
+  --color-orange-gc-light: #ffa109;
+
+  --color-grey-gc: #94a3b8;
   --color-grey-dark: #334155;
 
   --color-dark: #16181b;
 
-
   /* Dark theme colors */
-  --color-dark-primary: #1E3B15;
-  --color-dark-secondary: #2C492F;
-  
+  --color-dark-primary: #1e3b15;
+  --color-dark-secondary: #2c492f;
+
   /* Light theme colors */
   --color-light-primary: #f9fbfd;
   --color-light-secondary: #e2e8f0;
-  
+
   /* Text colors for dark theme */
   --color-dark-text-primary: #f9fbfd;
   --color-dark-text-secondary: #ffffff;
-  
+
   /* Text colors for light theme */
   --color-light-text-primary: #0f172a;
   --color-light-text-secondary: #0f172a;
-  
 
   --font-family-jakarta: "Plus Jakarta Sans", sans-serif;
 }
@@ -68,3 +70,4 @@ body {
 .overflow-ellipsis {
   text-overflow: ellipsis;
 }
+
