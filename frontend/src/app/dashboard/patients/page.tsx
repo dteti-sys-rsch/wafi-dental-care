@@ -7,6 +7,8 @@ import { IPatient } from "@/app/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ContentCard from "@/components/shared/ContentCard";
+import Link from "next/link";
+import { Eye, Trash } from "lucide-react";
 
 export default function PatientPage() {
   const [openNewPatientModal, setOpenNewPatientModal] = useState<boolean>(false);
@@ -119,21 +121,18 @@ export default function PatientPage() {
                         {patient.patientWAPhoneNumber}
                       </td>
                       <td className="px-6 py-4 text-sm">
-                        <button
-                          onClick={() => {
-                            /* Handle view/edit */
-                          }}
-                          className="text-green-dark dark:text-white hover:underline mr-4"
-                        >
-                          View
-                        </button>
+                        <Link href={`/dashboard/patients/${patient._id}`} className="cursor-pointer!">
+                          <button className="text-green-dark dark:text-white mr-4 cursor-pointer hover:opacity-80">
+                            <Eye />
+                          </button>
+                        </Link>
                         <button
                           onClick={() => {
                             /* Handle delete */
                           }}
-                          className="text-red-500 hover:underline"
+                          className="text-red-500 cursor-pointer hover:opacity-80"
                         >
-                          Delete
+                          <Trash />
                         </button>
                       </td>
                     </tr>
@@ -154,3 +153,4 @@ export default function PatientPage() {
     </main>
   );
 }
+
