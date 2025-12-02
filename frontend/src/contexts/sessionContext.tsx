@@ -1,6 +1,7 @@
 // SessionContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { IUser, UserRole } from "../app/types";
+import { setCookie } from "@/app/utilities/cookie";
 
 // ============================================================================
 // SESSION TYPES
@@ -94,7 +95,8 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
 
       const data = await response.json();
 
-      // Backend sets HttpOnly cookie in response headers
+      setCookie("AuthToken", data.token, 24 * 3600)
+
       // Store user data in localStorage for client-side access
       localStorage.setItem("userData", JSON.stringify(data.user));
 
