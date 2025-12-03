@@ -63,13 +63,13 @@ exports.getAllUsers = async (req, res) => {
       path: 'branch',
       select: '-_id -__v'
     })
-    res.status(200).json({ 
+    res.status(200).json({
       users,
       totalUsers: users.length,
-      totalOwner: users.filter(user => user.role === 'OWNER').length,
-      totalManager: users.filter(user => user.role === 'MANAGER').length,
-      totalDoctor: users.filter(user => user.role === 'DOCTOR').length,
-      totalStaff: users.filter(user => user.role === 'STAFF').length
+      totalOwner: users.filter((user) => user.role === 'OWNER').length,
+      totalManager: users.filter((user) => user.role === 'MANAGER').length,
+      totalDoctor: users.filter((user) => user.role === 'DOCTOR').length,
+      totalStaff: users.filter((user) => user.role === 'STAFF').length
     })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
