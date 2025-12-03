@@ -136,7 +136,7 @@ export async function getAllAssessments() {
 }
 
 export async function createAssessment(data: unknown) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/medicalassessment/add`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/medicalassessment/add`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

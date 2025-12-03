@@ -49,10 +49,10 @@ export default function NewAssessment({
       const assessmentData = {
         patientId: patientId,
         assessmentBy: user?._id,
-        assessmentDate: assessmentDate,
-        assesementSubjective: subjective,
-        assesementObjective: objective,
-        assesementDiagnosisAndAction: diagnosisAndAction,
+        date: assessmentDate,
+        subjective,
+        objective,
+        diagnosisAndAction,
       };
 
       const response = await createAssessment(assessmentData);

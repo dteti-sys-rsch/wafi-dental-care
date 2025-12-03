@@ -3,6 +3,9 @@ import { IPatient } from "@/app/types";
 import { getPatientById } from "@/client/client";
 import NewAssessment from "@/components/dashboard/NewAssessment";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import Button from "@/components/shared/Button";
+import { File } from "lucide-react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -47,7 +50,7 @@ export default function PatientDetailPage() {
       }
     }
     fetchPatientData();
-  }, [id]);
+  }, [id, openNewAssessment]);
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -214,26 +217,44 @@ export default function PatientDetailPage() {
         {/* Medical Assessments Card */}
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
           <div className="flex items-start justify-between mb-4">
-            <h3 className="text-xl font-bold text-green-dark dark:text-white">Medical Assessments</h3>
-          <NewAssessment modalState={openNewAssessment} setModalState={setOpenNewAssessment} patientId={id as string} />
+            <h3 className="text-xl font-bold text-green-dark dark:text-white">Recent Assessments</h3>
+            {/* <NewAssessment
+              modalState={openNewAssessment}
+              setModalState={setOpenNewAssessment}
+              patientId={id as string}
+            /> */}
           </div>
           {patient.patientMedicalAssessments.length > 0 ? (
             <ul className="space-y-2">
-              {patient.patientMedicalAssessments.map((assessment, index) => (
-                <li
-                  key={index}
-                  className="flex items-center gap-2 text-grey-dark dark:text-grey-gc"
-                >
-                  <span className="w-2 h-2 bg-green-dark rounded-full"></span>
-                  {typeof assessment === "string" ? assessment : assessment._id}
+              {patient.patientMedicalAssessments.slice(0, 4).map((assessment, index) => (
+                <li key={index}>
+                  <Link
+                    href={`/dashboard/patients/${id}/assessments/${assessment}`}
+                    className="flex items-center hover:underline gap-2 text-grey-dark dark:text-grey-gc"
+                  >
+                    <File />
+                    <span>{assessment as string}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
           ) : (
             <p className="text-grey-dark dark:text-grey-gc italic">No medical assessments recorded</p>
           )}
+          <div className="mt-4 flex gap-2">
+            <Link className="min-w-[100px]" href={`/dashboard/patients/${id}/assessments`}>
+              <Button className="w-full bg-blue-500! hover:bg-blue-600!">See All</Button>
+            </Link>
+
+            <NewAssessment
+              modalState={openNewAssessment}
+              setModalState={setOpenNewAssessment}
+              patientId={id as string}
+            />
+          </div>
         </div>
       </div>
     </main>
   );
 }
+
