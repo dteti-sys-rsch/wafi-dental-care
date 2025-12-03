@@ -53,3 +53,25 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
+
+/*
+  Get all users with their associated branch details
+*/
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password -__v').populate({
+      path: 'branch',
+      select: '-_id -__v'
+    })
+    res.status(200).json({ 
+      users,
+      totalUsers: users.length,
+      totalOwner: users.filter(user => user.role === 'OWNER').length,
+      totalManager: users.filter(user => user.role === 'MANAGER').length,
+      totalDoctor: users.filter(user => user.role === 'DOCTOR').length,
+      totalStaff: users.filter(user => user.role === 'STAFF').length
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
