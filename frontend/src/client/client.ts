@@ -246,3 +246,35 @@ export async function addDiseaseHistory(data: unknown) {
 
   return response.json();
 }
+
+export async function createBranch(data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to create branch');
+  }
+
+  return response.json();
+}
+
+export async function deleteBranch(branchId: string) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/delete/${branchId}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to delete branch');
+  }
+
+  return response.json();
+}

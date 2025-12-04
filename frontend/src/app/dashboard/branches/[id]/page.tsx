@@ -2,8 +2,10 @@
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import WorkInProgress from "@/components/shared/WorkInProgress";
 import { ProtectedRoute } from "@/contexts/sessionContext";
+import { useParams } from "next/navigation";
 
-export default function AppointmentsPage() {
+export default function BranchDetailsPage() {
+  const { id } = useParams();
   const breadcrumbData = [
     {
       label: "Home",
@@ -14,8 +16,12 @@ export default function AppointmentsPage() {
       url: "/dashboard",
     },
     {
-      label: "Appointments",
-      url: "/dashboard/appointments",
+      label: "Branches",
+      url: "/dashboard/branches",
+    },
+    {
+      label: id as string,
+      url: `/dashboard/branches/${id}`,
     },
   ];
 
