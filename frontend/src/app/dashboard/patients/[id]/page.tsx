@@ -241,7 +241,7 @@ export default function PatientDetailPage() {
             </div>
             {patient.patientMedicalAssessments.length > 0 ? (
               <ul className="space-y-2">
-                {patient.patientMedicalAssessments.slice(0, 4).map((assessment, index) => (
+                {patient.patientMedicalAssessments.slice(0, 5).map((assessment, index) => (
                   <li key={index}>
                     <Link
                       href={`/dashboard/patients/${id}/assessments/${assessment}`}
