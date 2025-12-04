@@ -16,7 +16,7 @@ exports.createUser = async (req, res) => {
       role
     })
     await user.save()
-    res.status(201).json({ message: 'User created successfully', user })
+    res.status(201).json({ message: 'User created successfully' })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
@@ -71,6 +71,38 @@ exports.getAllUsers = async (req, res) => {
       totalDoctor: users.filter((user) => user.role === 'DOCTOR').length,
       totalStaff: users.filter((user) => user.role === 'STAFF').length
     })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Update user details by ID
+*/
+exports.updateUserById = async (req, res) => {
+  try {
+    const { userId } = req.params
+    const updateData = { ...req.body }
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10)
+    }
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true
+    }).select('-password -__v')
+    res.status(200).json({ message: 'User updated successfully' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Delete a user by ID
+*/
+exports.deleteUserById = async (req, res) => {
+  try {
+    const { userId } = req.params
+    await User.findByIdAndDelete(userId)
+    res.status(200).json({ message: 'User deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
