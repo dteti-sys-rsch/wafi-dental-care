@@ -28,3 +28,36 @@ exports.getAllBranches = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
+
+/*
+  Edit branch by ID
+*/
+exports.updateBranchById = async (req, res) => {
+  try {
+    const { branchId } = req.params
+    const { name, location } = req.body
+    const updateData = {}
+    if (name) updateData.branchName = name
+    if (location) updateData.branchLocation = location
+
+    const branch = await Branch.findByIdAndUpdate(branchId, updateData, {
+      new: true
+    })
+    res.status(200).json({ message: 'Branch updated successfully', branch })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
+
+/*
+  Delete branch by ID
+*/
+exports.deleteBranchById = async (req, res) => {
+  try {
+    const { branchId } = req.params
+    await Branch.findByIdAndDelete(branchId)
+    res.status(200).json({ message: 'Branch deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
