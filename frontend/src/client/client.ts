@@ -112,10 +112,10 @@ export async function deletePatientById(patientId: string) {
   });
 
   if (response.status == 401) {
-    throw new Error("Authentication Error")
+    throw new Error("Authentication Error");
   }
 
-    if (!response.ok) {
+  if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || "Failed to update patient");
   }
@@ -125,11 +125,11 @@ export async function deletePatientById(patientId: string) {
 
 export async function getAllAssessments() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/assessment/`, {
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch assessments');
+    throw new Error("Failed to fetch assessments");
   }
 
   return response.json();
@@ -137,32 +137,29 @@ export async function getAllAssessments() {
 
 export async function createAssessment(data: unknown) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/medicalassessment/add`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to create assessment');
+    throw new Error(error.message || "Failed to create assessment");
   }
 
   return response.json();
 }
 
 export async function getMedicalAssessmentsByPatient(patientId: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/medicalassessment/${patientId}`,
-    {
-      credentials: 'include',
-    }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/medicalassessment/${patientId}`, {
+    credentials: "include",
+  });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch assessments');
+    throw new Error("Failed to fetch assessments");
   }
 
   return response.json();
@@ -171,11 +168,11 @@ export async function getMedicalAssessmentsByPatient(patientId: string) {
 // client/client.ts
 export async function getAllUsers() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/`, {
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch users');
+    throw new Error("Failed to fetch users");
   }
 
   return response.json();
@@ -183,31 +180,31 @@ export async function getAllUsers() {
 
 export async function createUser(data: unknown) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/register`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to create user');
+    throw new Error(error.message || "Failed to create user");
   }
 
   return response.json();
 }
 
 export async function deleteUser(userId: string) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/delete/${userId}`, {
-    method: 'DELETE',
-    credentials: 'include',
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userId}`, {
+    method: "DELETE",
+    credentials: "include",
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to delete user');
+    throw new Error(error.message || "Failed to delete user");
   }
 
   return response.json();
@@ -216,32 +213,29 @@ export async function deleteUser(userId: string) {
 export async function getAllBranches() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/`, {
     method: "GET",
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch branches');
+    throw new Error("Failed to fetch branches");
   }
 
   return response.json();
 }
 
 export async function addDiseaseHistory(data: unknown) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/diseasehistory/add`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/diseasehistory/add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to add disease history');
+    throw new Error(error.message || "Failed to add disease history");
   }
 
   return response.json();
@@ -249,7 +243,39 @@ export async function addDiseaseHistory(data: unknown) {
 
 export async function createBranch(data: unknown) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch`, {
-    method: 'POST',
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to create branch");
+  }
+
+  return response.json();
+}
+
+export async function deleteBranch(branchId: string) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/delete/${branchId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to delete branch");
+  }
+
+  return response.json();
+}
+
+export async function updateUser(userId: string, data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userId}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -259,21 +285,7 @@ export async function createBranch(data: unknown) {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to create branch');
-  }
-
-  return response.json();
-}
-
-export async function deleteBranch(branchId: string) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/delete/${branchId}`, {
-    method: 'DELETE',
-    credentials: 'include',
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to delete branch');
+    throw new Error(error.message || 'Failed to update user');
   }
 
   return response.json();

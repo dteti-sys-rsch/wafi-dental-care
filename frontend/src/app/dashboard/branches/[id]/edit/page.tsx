@@ -23,6 +23,10 @@ export default function EditBranchPage() {
       label: id as string,
       url: `/dashboard/branches/${id}`,
     },
+    {
+      label: "Edit",
+      url: `/dashboard/branches/${id}/edit`
+    }
   ];
 
   return (
