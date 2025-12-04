@@ -27,6 +27,10 @@ const MedicalAssessmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    suggestion: {
+        type: String,
+        required: true
+    }
 })
 
 const MedicalAssessment = mongoose.model(

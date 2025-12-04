@@ -275,7 +275,7 @@ exports.deletePatientById = async (req, res) => {
 */
 exports.createMedicalAssessment = async (req, res) => {
   try {
-    const { patientId, date, subjective, objective, diagnosisAndAction } =
+    const { patientId, date, subjective, objective, diagnosisAndAction, suggestion } =
       req.body
     const assessmentBy = req.userId
 
@@ -290,7 +290,8 @@ exports.createMedicalAssessment = async (req, res) => {
       assessmentDate: date,
       assesementSubjective: subjective,
       assesementObjective: objective,
-      assesementDiagnosisAndAction: diagnosisAndAction
+      assesementDiagnosisAndAction: diagnosisAndAction,
+      suggestion
     })
     await medicalAssessment.save()
 
@@ -335,7 +336,7 @@ exports.getMedicalAssessmentsByPatient = async (req, res) => {
 exports.editMedicalAssessment = async (req, res) => {
   try {
     const { assessmentId } = req.params
-    const { date, subjective, objective, diagnosisAndAction } = req.body
+    const { date, subjective, objective, diagnosisAndAction, suggestion } = req.body
 
     const medicalAssessment = await MedicalAssessment.findById(assessmentId)
     if (!medicalAssessment) {
@@ -349,6 +350,7 @@ exports.editMedicalAssessment = async (req, res) => {
       objective || medicalAssessment.assesementObjective
     medicalAssessment.assesementDiagnosisAndAction =
       diagnosisAndAction || medicalAssessment.assesementDiagnosisAndAction
+    medicalAssessment.suggestion = suggestion || medicalAssessment.suggestion
     await medicalAssessment.save()
 
     res.status(200).json({
