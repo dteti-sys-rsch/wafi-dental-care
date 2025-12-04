@@ -260,7 +260,7 @@ export async function createBranch(data: unknown) {
 }
 
 export async function deleteBranch(branchId: string) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/delete/${branchId}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/${branchId}`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -275,17 +275,35 @@ export async function deleteBranch(branchId: string) {
 
 export async function updateUser(userId: string, data: unknown) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userId}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to update user');
+    throw new Error(error.message || "Failed to update user");
+  }
+
+  return response.json();
+}
+
+export async function updateBranch(branchId: string, data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/branch/${branchId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update branch");
   }
 
   return response.json();
