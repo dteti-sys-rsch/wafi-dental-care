@@ -14,17 +14,17 @@ const TransactionSchema = new mongoose.Schema({
         enum: ['CASH', 'CARD', 'QRIS'],
         required: true
     },
-    patient: {
+    patientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Patient',
         required: true
     },
-    doctor: {
+    assessmentBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    branch: {
+    branchId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Branch',
         required: true

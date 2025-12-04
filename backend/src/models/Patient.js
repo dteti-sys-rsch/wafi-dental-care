@@ -32,7 +32,7 @@ const PatientSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  //   START WITH COUNTRY CODE, E.G., +62
+  //   START WITH COUNTRY CODE, E.G., 62
   patientWAPhoneNumber: {
     type: Number,
     required: true
