@@ -8,6 +8,7 @@ import { IUser, UserRole } from "@/app/types";
 import { getAllUsers, deleteUser } from "@/client/client";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/contexts/sessionContext";
+import ContentCard from "@/components/shared/ContentCard";
 
 export default function UsersAndStaffsPage() {
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function UsersAndStaffsPage() {
   };
 
   const getBranchName = (user: IUser): string => {
-    if (typeof user.branch === 'string') {
+    if (typeof user.branch === "string") {
       return user.branch;
     }
     return user.branch.branchName;
@@ -84,18 +85,16 @@ export default function UsersAndStaffsPage() {
   return (
     <main className="bg-light-secondary dark:bg-dark-primary w-full min-h-screen p-10">
       <Breadcrumb data={breadcrumbData} />
-      
+
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-[32px] font-semibold text-green-dark dark:text-white">
-            Users & Staff Management
-          </h1>
+          <h1 className="text-[32px] font-semibold text-green-dark dark:text-white">Users & Staff Management</h1>
           <p className="font-semibold text-grey-dark dark:text-grey-gc mt-2">
             Manage clinic users and staff members here.
           </p>
         </div>
-        <NewUser 
-          modalState={openNewUserModal} 
+        <NewUser
+          modalState={openNewUserModal}
           setModalState={setOpenNewUserModal}
           onUserCreated={fetchUsers}
         />
@@ -104,128 +103,114 @@ export default function UsersAndStaffsPage() {
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">
-            Total Users
-          </p>
+          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">Total Users</p>
+          <p className="text-3xl font-bold text-green-dark dark:text-white mt-2">{users.length}</p>
+        </div>
+        <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
+          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">Doctors</p>
           <p className="text-3xl font-bold text-green-dark dark:text-white mt-2">
-            {users.length}
+            {users.filter((u) => u.role === UserRole.DOCTOR).length}
           </p>
         </div>
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">
-            Doctors
-          </p>
+          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">Managers</p>
           <p className="text-3xl font-bold text-green-dark dark:text-white mt-2">
-            {users.filter(u => u.role === UserRole.DOCTOR).length}
+            {users.filter((u) => u.role === UserRole.MANAGER).length}
           </p>
         </div>
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">
-            Managers
-          </p>
+          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">Staff</p>
           <p className="text-3xl font-bold text-green-dark dark:text-white mt-2">
-            {users.filter(u => u.role === UserRole.MANAGER).length}
-          </p>
-        </div>
-        <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-          <p className="text-sm font-semibold text-grey-dark dark:text-grey-gc uppercase">
-            Staff
-          </p>
-          <p className="text-3xl font-bold text-green-dark dark:text-white mt-2">
-            {users.filter(u => u.role === UserRole.STAFF).length}
+            {users.filter((u) => u.role === UserRole.STAFF).length}
           </p>
         </div>
       </div>
 
-      {/* Users Table */}
-      <div className="mt-8 bg-white dark:bg-dark-secondary rounded-lg shadow-md overflow-hidden">
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-dark dark:border-white"></div>
-          </div>
-        ) : users.length === 0 ? (
-          <div className="text-center py-20 text-grey-dark dark:text-grey-gc">
-            <p className="text-xl">No users found</p>
-            <p className="mt-2">Add a new user to get started</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-light-primary dark:bg-dark-primary">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
-                    Username
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
-                    Role
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
-                    Branch
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-grey-light dark:divide-grey-dark">
-                {users.map((user) => (
-                  <tr 
-                    key={user._id}
-                    className="hover:bg-light-primary dark:hover:bg-dark-primary transition-colors"
-                  >
-                    <td className="px-6 py-4 text-sm font-medium text-green-dark dark:text-white">
-                      {user.username}
-                      {currentUser?._id === user._id && (
-                        <span className="ml-2 text-xs text-grey-dark dark:text-grey-gc italic">
-                          (You)
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getRoleBadgeColor(user.role)}`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-grey-dark dark:text-grey-gc">
-                      {getBranchName(user)}
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <button
-                        onClick={() => router.push(`/dashboard/users/${user._id}`)}
-                        className="text-green-dark dark:text-white hover:underline mr-4"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => router.push(`/dashboard/users/${user._id}/edit`)}
-                        className="text-blue-500 hover:underline mr-4"
-                      >
-                        Edit
-                      </button>
-                      {currentUser?._id !== user._id && (
-                        <button
-                          onClick={() => setDeleteConfirmId(user._id)}
-                          className="text-red-500 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </td>
+      <ContentCard className="mt-8">
+        {/* Users Table */}
+        <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md overflow-hidden">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-dark dark:border-white"></div>
+            </div>
+          ) : users.length === 0 ? (
+            <div className="text-center py-20 text-grey-dark dark:text-grey-gc">
+              <p className="text-xl">No users found</p>
+              <p className="mt-2">Add a new user to get started</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-light-secondary dark:bg-dark-primary border-b border-white">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
+                      Username
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">Role</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">Branch</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-grey-dark dark:text-white">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                </thead>
+                <tbody className="divide-y divide-grey-light dark:divide-grey-dark">
+                  {users.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-light-primary dark:hover:bg-dark-primary transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-green-dark dark:text-white">
+                        {user.username}
+                        {currentUser?._id === user._id && (
+                          <span className="ml-2 text-xs text-grey-dark dark:text-grey-gc italic">(You)</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getRoleBadgeColor(
+                            user.role
+                          )}`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-grey-dark dark:text-grey-gc">{getBranchName(user)}</td>
+                      <td className="px-6 py-4 text-sm">
+                        <button
+                          onClick={() => router.push(`/dashboard/users/${user._id}`)}
+                          className="text-green-dark dark:text-white hover:underline mr-4"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => router.push(`/dashboard/users/${user._id}/edit`)}
+                          className="text-blue-500 hover:underline mr-4"
+                        >
+                          Edit
+                        </button>
+                        {currentUser?._id !== user._id && (
+                          <button
+                            onClick={() => setDeleteConfirmId(user._id)}
+                            className="text-red-500 hover:underline"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </ContentCard>
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold text-green-dark dark:text-white mb-4">
-              Confirm Delete
-            </h3>
+            <h3 className="text-xl font-bold text-green-dark dark:text-white mb-4">Confirm Delete</h3>
             <p className="text-grey-dark dark:text-grey-gc mb-6">
               Are you sure you want to delete this user? This action cannot be undone.
             </p>
@@ -250,7 +235,7 @@ export default function UsersAndStaffsPage() {
       {/* User count */}
       {!isLoading && users.length > 0 && (
         <div className="mt-4 text-sm text-grey-dark dark:text-grey-gc">
-          Showing {users.length} user{users.length !== 1 ? 's' : ''}
+          Showing {users.length} user{users.length !== 1 ? "s" : ""}
         </div>
       )}
     </main>
