@@ -225,3 +225,24 @@ export async function getAllBranches() {
 
   return response.json();
 }
+
+export async function addDiseaseHistory(data: unknown) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/patient/diseasehistory/add`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to add disease history');
+  }
+
+  return response.json();
+}

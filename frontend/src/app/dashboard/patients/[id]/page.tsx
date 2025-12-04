@@ -2,6 +2,7 @@
 import { IPatient } from "@/app/types";
 import { getPatientById } from "@/client/client";
 import NewAssessment from "@/components/dashboard/NewAssessment";
+import NewDiseaseHistory from "@/components/dashboard/NewDiseaseHistory";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import Button from "@/components/shared/Button";
 import { ProtectedRoute } from "@/contexts/sessionContext";
@@ -15,6 +16,7 @@ export default function PatientDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const [openNewAssessment, setOpenNewAssessment] = useState<boolean>(false);
+  const [openNewDiseaseHistory, setOpenNewDiseaseHistory] = useState<boolean>(false);
 
   const breadcrumbData = [
     {
@@ -51,7 +53,7 @@ export default function PatientDetailPage() {
       }
     }
     fetchPatientData();
-  }, [id, openNewAssessment]);
+  }, [id, openNewAssessment, openNewDiseaseHistory]);
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -200,7 +202,9 @@ export default function PatientDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Disease History Card */}
           <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold text-green-dark dark:text-white mb-4">Disease History</h3>
+            <div className="flex items-start justify-between mb-4">
+              <h3 className="text-xl font-bold text-green-dark dark:text-white">Disease History</h3>
+            </div>
             {patient.patientDiseaseHistory.length > 0 ? (
               <ul className="space-y-2">
                 {patient.patientDiseaseHistory.map((disease, index) => (
@@ -209,24 +213,31 @@ export default function PatientDetailPage() {
                     className="flex items-center gap-2 text-grey-dark dark:text-grey-gc"
                   >
                     <span className="w-2 h-2 bg-green-dark rounded-full"></span>
-                    {typeof disease === "string" ? disease : disease._id}
+                    {typeof disease === "string" ? disease : disease.diseaseName}
+                    {typeof disease !== "string" && disease.diseaseDiagnosisDate && (
+                      <span className="text-xs text-grey-dark dark:text-grey-gc">
+                        ({formatDate(disease.diseaseDiagnosisDate)})
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
             ) : (
               <p className="text-grey-dark dark:text-grey-gc italic">No disease history recorded</p>
             )}
+            <div className="mt-4">
+              <NewDiseaseHistory
+                modalState={openNewDiseaseHistory}
+                setModalState={setOpenNewDiseaseHistory}
+                patientId={id as string}
+              />
+            </div>
           </div>
 
           {/* Medical Assessments Card */}
           <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
             <div className="flex items-start justify-between mb-4">
               <h3 className="text-xl font-bold text-green-dark dark:text-white">Recent Assessments</h3>
-              {/* <NewAssessment
-              modalState={openNewAssessment}
-              setModalState={setOpenNewAssessment}
-              patientId={id as string}
-            /> */}
             </div>
             {patient.patientMedicalAssessments.length > 0 ? (
               <ul className="space-y-2">

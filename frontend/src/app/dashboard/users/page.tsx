@@ -40,7 +40,7 @@ export default function UsersAndStaffsPage() {
     try {
       setIsLoading(true);
       const response = await getAllUsers();
-      setUsers(response);
+      setUsers(response.users);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to load users");
     } finally {
