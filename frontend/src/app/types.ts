@@ -3,15 +3,21 @@
 // ============================================================================
 
 export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
+  MALE = "MALE",
+  FEMALE = "FEMALE",
 }
 
 export enum UserRole {
-  OWNER = 'OWNER',
-  MANAGER = 'MANAGER',
-  STAFF = 'STAFF',
-  DOCTOR = 'DOCTOR',
+  OWNER = "OWNER",
+  MANAGER = "MANAGER",
+  STAFF = "STAFF",
+  DOCTOR = "DOCTOR",
+}
+
+export enum PaymentMethod {
+  CASH = "CASH",
+  CARD = "CARD",
+  QRIS = "QRIS",
 }
 
 // ============================================================================
@@ -62,4 +68,13 @@ export interface IPatient {
   patientEmail?: string;
   patientDiseaseHistory: (string | IDiseaseHistory)[];
   patientMedicalAssessments: (string | IMedicalAssessment)[];
+}
+
+export interface ITransaction {
+  transactionDate: Date;
+  transactionAmount: number;
+  paymentMethod: PaymentMethod;
+  patientId: string;
+  assessmentBy: string | IUser;
+  branchId: string;
 }
