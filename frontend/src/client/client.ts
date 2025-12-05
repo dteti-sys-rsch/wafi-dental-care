@@ -308,3 +308,48 @@ export async function updateBranch(branchId: string, data: unknown) {
 
   return response.json();
 }
+
+export async function getAllTransactions() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/transaction/`, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch transactions');
+  }
+
+  return response.json();
+}
+
+export async function createTransaction(data: unknown) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/transaction/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to create transaction');
+  }
+
+  return response.json();
+}
+
+export async function getTransactionsByBranch(branchId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/transaction/branch/${branchId}`,
+    {
+      credentials: 'include',
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch transactions');
+  }
+
+  return response.json();
+}

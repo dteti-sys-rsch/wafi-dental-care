@@ -29,6 +29,7 @@ export default function NewAssessment({
   const [subjective, setSubjective] = useState<string>("");
   const [objective, setObjective] = useState<string>("");
   const [diagnosisAndAction, setDiagnosisAndAction] = useState<string>("");
+  const [suggestion, setSuggestion] = useState<string>("");
 
   function reset() {
     const now = new Date();
@@ -36,11 +37,12 @@ export default function NewAssessment({
     setSubjective("");
     setObjective("");
     setDiagnosisAndAction("");
+    setSuggestion("");
   }
 
   async function handleSubmit() {
     // Validation
-    if (!subjective || !objective || !diagnosisAndAction) {
+    if (!subjective || !objective || !diagnosisAndAction || !suggestion) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -53,6 +55,7 @@ export default function NewAssessment({
         subjective,
         objective,
         diagnosisAndAction,
+        suggestion,
       };
 
       const response = await createAssessment(assessmentData);
@@ -181,6 +184,23 @@ export default function NewAssessment({
                 onChange={(e) => setDiagnosisAndAction(e.target.value)}
                 rows={5}
                 placeholder="e.g., Diagnosis: Tension headache. Plan: Prescribe paracetamol 500mg 3x daily, rest, follow-up in 3 days if symptoms persist..."
+                className="outline outline-white/20 hover:outline-white-50 focus:outline-white px-2 py-1 rounded-md bg-transparent text-green-dark dark:text-white resize-none"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="uppercase font-bold text-grey-gc">
+                Suggestion <span className="text-red-500">*</span>
+              </label>
+              <p className="text-xs text-grey-dark dark:text-grey-gc mb-1">
+                Follow-up recommendations and patient care suggestions
+              </p>
+              <textarea
+                value={suggestion}
+                onChange={(e) => setSuggestion(e.target.value)}
+                rows={3}
+                placeholder="e.g., Avoid stress, get adequate sleep, return if symptoms worsen..."
                 className="outline outline-white/20 hover:outline-white-50 focus:outline-white px-2 py-1 rounded-md bg-transparent text-green-dark dark:text-white resize-none"
                 required
               />

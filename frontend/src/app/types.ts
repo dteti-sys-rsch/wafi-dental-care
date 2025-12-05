@@ -53,6 +53,7 @@ export interface IMedicalAssessment {
   assesementSubjective: string;
   assesementObjective: string;
   assesementDiagnosisAndAction: string;
+  suggestion: string;
 }
 
 export interface IPatient {
@@ -71,10 +72,11 @@ export interface IPatient {
 }
 
 export interface ITransaction {
+  _id: string;
   transactionDate: Date;
   transactionAmount: number;
   paymentMethod: PaymentMethod;
-  patientId: string;
+  patientId: string | IPatient;
   assessmentBy: string | IUser;
-  branchId: string;
+  branchId: string | IBranch;
 }

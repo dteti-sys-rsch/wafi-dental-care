@@ -5,7 +5,7 @@ import ThemeSwitcher from "../shared/ThemeSwitcher";
 import LogoWhite from "@/../public/LogoWhite.png";
 import { usePathname } from "next/navigation";
 import NavigationItem from "./NavigationLink";
-import { Building2, Calendar, ClipboardList, FileText, House, UserCog, Users } from "lucide-react";
+import { Building2, Calendar, FileText, House, UserCog, Users, NotebookPen } from "lucide-react";
 import Link from "next/link";
 
 export function Sidebar() {
@@ -25,11 +25,16 @@ export function Sidebar() {
       active: path.startsWith("/dashboard/patients"),
     },
     {
+      label: "Transactions",
+      link: "/dashboard/transactions",
+      icon: <NotebookPen />,
+      active: path.startsWith("/dashboard/transactions"),
+    },
+    {
       label: "Appointments",
       link: "/dashboard/appointments",
       icon: <Calendar />,
       active: path.startsWith("/dashboard/appointments"),
-      // If you plan to add scheduling
     },
   ];
 
