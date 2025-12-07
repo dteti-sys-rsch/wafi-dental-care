@@ -262,7 +262,6 @@ export default function NewTransaction({
                     onChange={(e) => setTransactionAmount(e.target.value)}
                     placeholder="50000"
                     min="0"
-                    step="1000"
                     className="outline outline-white/20 hover:outline-white-50 focus:outline-white px-2 py-1 rounded-md bg-transparent text-green-dark dark:text-white"
                     required
                   />
