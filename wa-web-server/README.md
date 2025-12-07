@@ -5,7 +5,7 @@
 1. Build
 
 ```
-docker build -t wafi-dental-care-wa:latest
+docker build -t wafi-dental-care-wa:latest .
 ```
 
 2. Run
