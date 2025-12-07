@@ -119,6 +119,7 @@ Jika ada keluhan, jangan ragu untuk menghubungi kami.`;
 
     res.status(201).json({ message: "Transaction created successfully", transaction });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
