@@ -6,11 +6,11 @@ import Breadcrumb from "@/components/shared/Breadcrumb";
 import { IMedicalAssessment } from "@/app/types";
 import { getAllAssessments } from "@/client/client";
 import { useRouter } from "next/navigation";
-import NewAssessment from "@/components/dashboard/NewAssessment";
+// import NewAssessment from "@/components/dashboard/NewAssessment";
 
 export default function AssessmentsPage() {
   const router = useRouter();
-  const [openNewAssessmentModal, setOpenNewAssessmentModal] = useState<boolean>(false);
+  // const [openNewAssessmentModal, setOpenNewAssessmentModal] = useState<boolean>(false);
   const [assessments, setAssessments] = useState<IMedicalAssessment[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -86,11 +86,11 @@ export default function AssessmentsPage() {
             Manage medical assessments for your clinic patients here.
           </p>
         </div>
-        <NewAssessment 
+        {/* <NewAssessment
           modalState={openNewAssessmentModal} 
           setModalState={setOpenNewAssessmentModal}
           onAssessmentCreated={fetchAssessments}
-        />
+        /> */}
       </div>
 
       {/* Table */}
