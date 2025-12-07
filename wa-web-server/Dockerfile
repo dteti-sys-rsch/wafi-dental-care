@@ -1,19 +1,9 @@
-FROM node:20 AS builder
+FROM ghcr.io/puppeteer/puppeteer:21.6.0
+# Chromium already installed! ✅
 
 WORKDIR /usr/src/app
-
 COPY package*.json ./
-
-RUN npm install --production
-
+RUN npm ci --only=production
 COPY . .
-
-FROM node:20-slim
-
-WORKDIR /usr/src/app
-
-COPY --from=builder /usr/src/app ./
-
-EXPOSE 3000
 
 CMD ["node", "index.js"]
